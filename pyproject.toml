@@ -1,8 +1,9 @@
 [project]
 name = "dnd-dice-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "A D&D toolset using MCP, including dice rolling and map management."
 readme = "README.md"
+license = { text = "CC-BY-NC-SA-4.0" }
 requires-python = ">=3.13"
 dependencies = [
     "mcp>=1.26.0",
