@@ -18,12 +18,29 @@ Before generating any content, internalize these rules for what makes a D&D city
 ### Graph Topology (The Skeleton)
 - **Multiple paths**: Between any two major locations, at least 2 distinct routes must exist so players make meaningful navigation choices.
 - **Risk/reward edges**: Some connections are dangerous (sewers, rooftops, haunted alleyways) but shorter. Others are safe but longer. Encode this in edge weights AND edge descriptions.
-- **Hidden connections**: Include 1–2 secret edges (mark with `"hidden": true` in edge data) that players can discover — secret tunnels, planar shortcuts, underground rivers.
+- **Hidden connections**: Include 1–2 secret edges (mark with `"hidden": true` in edge data) that players can discover — secret tunnels, planar shortcuts, underground rivers. **IMPORTANT: Be conservative with hidden paths. Urban settings should have very few (2-4 maximum). Hidden paths should have plausible in-world explanations (maintenance tunnels, emergency exits, known shortcuts). Avoid creating "mysterious" unexplained passages.**
 - **No degenerate topologies**: Avoid pure linear chains (A→B→C→D) or pure hub-and-spoke (everything connects to one central square). Aim for a mesh with 1–2 natural chokepoints.
 - **Scale by city size**:
   - Small: 5–7 nodes, 7–12 edges
   - Medium: 8–12 nodes, 12–20 edges
   - Large: 13–18 nodes, 20–30 edges
+
+### Large Faction Bases — Split When Necessary
+
+When designing faction headquarters or major strongholds that control significant territory, **split them into multiple sub-nodes** to avoid monolithic locations:
+
+**When to split**:
+- A location has distinct areas with different functions (e.g., "hospital" → "hospital-main" + "hospital-wards")
+- A location spans multiple floors/levels with different purposes (e.g., "government-building" → "government-building-lobby" + "government-building-basement")
+- A faction controls a complex that should be explored in stages
+
+**Naming convention**: Use hyphen format (`永辉超市-主层`, `永辉超市-仓库`, `市政府-主楼`, `市政府-地下设施`)
+
+**Requirements after splitting**:
+- Create separate `info.md` for each sub-node
+- Update all edge connections (source/target) to reference the correct sub-nodes
+- Update faction `locations` array to include the new sub-node IDs
+- Ensure internal connections between sub-nodes (weight=1 for same-building access)
 
 ### Location Variety (The Flesh)
 Every city must include a balanced mix from these categories. No category should dominate:
@@ -57,7 +74,7 @@ If the user's brief is sufficient to proceed (name + any thematic hint), generat
 ### Step 2: Design the City Skeleton
 1. Define the central tension and 2–3 factions.
 2. Create the location list with types, ensuring category balance.
-3. Design the graph edges with weights (1–20 scale, where 1 = adjacent/instant, 20 = long dangerous journey across the city).
+3. Design the graph edges with weights. **The weight value represents kilometers (km)** — so weight=5 means approximately 5 kilometers between locations. Adjust descriptions to match the distance. Weight scale: 1-20, where 1 = adjacent (under 1km), 20 = long dangerous journey (around 20km).
 4. Mark 1–2 edges as hidden.
 5. Verify topology: connected graph, no isolated nodes, multiple paths exist between key locations, at least one chokepoint.
 
@@ -183,11 +200,13 @@ map_data/
 Before presenting your final output, verify:
 - ☐ The graph is connected — every node is reachable from every other node.
 - ☐ Multiple paths exist between at least 2 pairs of important locations.
-- ☐ At least 1 hidden edge exists.
+- ☐ Hidden edges are kept to a minimum (2-4 max for urban settings) and have plausible explanations.
+- ☐ Large faction bases have been split into sub-nodes if they have distinct areas.
 - ☐ Location types are balanced — no single type exceeds 30% of total nodes.
 - ☐ The central tension is specific and creates actionable adventure hooks (not vague like "things are bad").
 - ☐ At least 3 secrets across all locations reference OTHER locations by name.
 - ☐ Every node `id` has a matching `info.md` file path in the output.
 - ☐ Every edge `source` and `target` matches an existing node `id` exactly.
+- ☐ Edge weights represent kilometers (weight=5 means ~5km).
 - ☐ Edge weights vary meaningfully (not all the same number).
 - ☐ The DM Cheat Sheet is included and contains a non-obvious twist.
