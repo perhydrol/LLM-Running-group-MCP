@@ -16,14 +16,14 @@ def get_check_value(difficulty: str) -> int:
     """
     # Define ranges for each difficulty level (low inclusive, high exclusive)
     ranges = {
-        "轻轻松松": (1, 8),  # 1-7
-        "简单": (8, 13),  # 8-12
-        "中等": (13, 17),  # 13-16
-        "困难": (17, 20),  # 17-19
-        "几乎不可能成功": (20, 21),  # 20
+        "轻轻松松": (1, 6),  # 1-5
+        "简单": (6, 11),  # 6-10
+        "中等": (11, 14),  # 11-14
+        "困难": (14, 18),  # 15-18
+        "几乎不可能成功": (18, 21),  # 19-20
     }
 
-    low, high = ranges.get(difficulty, (8, 13))  # Default to '简单'
+    low, high = ranges.get(difficulty, (6, 11))  # Default to '简单'
     return np.random.randint(low, high)
 
 

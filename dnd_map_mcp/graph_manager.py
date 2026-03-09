@@ -97,6 +97,53 @@ class GraphManager:
         except FileNotFoundError:
             return f"City '{city_name}' not found."
 
+    def get_location_loot(self, city_name: str, location_name: str) -> Dict[str, Any]:
+        """
+        Get loot table for a specific location.
+        """
+        loot_path = self.base_path / city_name / "loot.json"
+
+        if not loot_path.exists():
+            return {"error": f"No loot data found for city '{city_name}'."}
+
+        try:
+            with open(loot_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            loot_tables = data.get("loot_tables", [])
+
+            # First try exact match on location_name or location_id
+            target_location = None
+            for loc in loot_tables:
+                if (
+                    loc.get("location_name") == location_name
+                    or loc.get("location_id") == location_name
+                ):
+                    target_location = loc
+                    break
+
+            if not target_location:
+                return {
+                    "error": f"Location '{location_name}' not found in loot tables."
+                }
+
+            # Format the output
+            items = []
+            for item in target_location.get("loot", []):
+                items.append(
+                    {
+                        "item": item.get("item"),
+                        "quantity": item.get("quantity"),
+                        "description": item.get("description"),
+                        "rarity": item.get("rarity"),
+                    }
+                )
+
+            return {"location": location_name, "items": items}
+
+        except Exception as e:
+            return {"error": f"Failed to process loot data: {str(e)}"}
+
     def get_shortest_path(
         self, city_name: str, start_location: str, target_location: str
     ) -> Union[Dict[str, Any], str]:

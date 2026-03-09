@@ -79,6 +79,23 @@ def get_location_info(city_name: str, location_name: str) -> str:
 
 
 @mcp.tool()
+def get_location_loot(city_name: str, location_name: str) -> Dict[str, Any]:
+    """
+    Get loot table for a specific location.
+
+    Use this tool when the user wants to know what items can be found in a location.
+
+    Args:
+        city_name: The name of the city.
+        location_name: The name of the location.
+
+    Returns:
+        A dictionary containing the location name and a list of items with their quantity, description, and rarity.
+    """
+    return graph_manager.get_location_loot(city_name, location_name)
+
+
+@mcp.tool()
 def get_shortest_path(
     city_name: str, start_location: str, target_location: str
 ) -> Union[Dict[str, Any], str]:
